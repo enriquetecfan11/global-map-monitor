@@ -1,0 +1,2 @@
+export { FloatingPanel } from './FloatingPanel';
+
