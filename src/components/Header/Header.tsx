@@ -2,13 +2,18 @@ import React from 'react';
 import { ConnectionIndicator, LoadingIndicator } from '../StatusIndicators';
 import { SystemStatusBanner } from '../SystemStatus';
 import { useUIStore } from '../../stores/uiStore';
+import { useFeedStore } from '../../stores/feedStore';
+import { clearRssCache } from '../../utils/rssService';
 
 export const Header: React.FC = () => {
   const { loading } = useUIStore();
+  const { fetchAllFeeds, loading: feedsLoading } = useFeedStore();
 
-  const handleRefresh = () => {
-    // Placeholder: sin lógica real
-    console.log('Refresh clicked');
+  const handleRefresh = async () => {
+    // Limpiar cache para forzar recarga completa
+    clearRssCache();
+    // Refrescar todos los feeds
+    await fetchAllFeeds();
   };
 
   return (
@@ -28,10 +33,10 @@ export const Header: React.FC = () => {
         <ConnectionIndicator isOnline={true} />
         <button
           onClick={handleRefresh}
-          disabled={loading}
+          disabled={loading || feedsLoading}
           className="px-3 py-2 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-100 rounded-md transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-          aria-label="Actualizar datos"
-          title="Actualizar datos"
+          aria-label="Actualizar feeds RSS"
+          title="Actualizar feeds RSS"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,5 @@
 import React from 'react';
 import { MarketsTable } from './MarketsTable';
-import { SectorHeatmap } from './SectorHeatmap';
 
 export const MarketsSection: React.FC = () => {
   return (
@@ -12,7 +11,6 @@ export const MarketsSection: React.FC = () => {
       
       <div className="space-y-6">
         <MarketsTable />
-        <SectorHeatmap />
       </div>
     </section>
   );
