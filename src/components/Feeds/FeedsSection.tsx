@@ -1,84 +1,68 @@
-import React from 'react';
+/**
+ * Sección de Feeds Globales.
+ * 
+ * Consume feeds RSS reales desde Google News según docs/reference/RssFeedsStrategy.md.
+ * Usa componente FeedCard unificado para todas las categorías.
+ * 
+ * Layout de columnas según diseño de referencia:
+ * - WORLD / GEOPOLITICAL
+ * - TECHNOLOGY / AI
+ * - FINANCIAL
+ * - ALERTS (derivado de otras categorías)
+ */
 
-interface FeedItem {
-  id: string;
-  title: string;
-  category: string;
-  timestamp: string;
-  preview: string;
+import React, { useEffect } from 'react';
+import { useFeedStore } from '../../stores/feedStore';
+import { FeedCard } from './FeedCard';
+import type { FeedGroup, FeedItem } from '../../types/feed.types';
+
+interface FeedGroupConfig {
+  group: FeedGroup;
+  label: string;
+  getItems: (feeds: ReturnType<typeof useFeedStore>['feeds'], alerts: FeedItem[]) => FeedItem[];
 }
 
-const placeholderFeeds: FeedItem[] = [
+const feedGroups: FeedGroupConfig[] = [
   {
-    id: '1',
-    title: 'Global Economic Summit Updates',
-    category: 'World/Geopolitical',
-    timestamp: '2 hours ago',
-    preview: 'Leaders from major economies discuss trade agreements...',
+    group: 'world-geopolitical',
+    label: 'WORLD / GEOPOLITICAL',
+    getItems: (feeds) => [...feeds.world, ...feeds.geopolitical],
   },
   {
-    id: '2',
-    title: 'Regional Security Developments',
-    category: 'World/Geopolitical',
-    timestamp: '4 hours ago',
-    preview: 'New diplomatic initiatives in the Middle East region...',
+    group: 'technology-ai',
+    label: 'TECHNOLOGY / AI',
+    getItems: (feeds) => [...feeds.technology, ...feeds.ai],
   },
   {
-    id: '3',
-    title: 'AI Model Performance Breakthrough',
-    category: 'Technology/AI',
-    timestamp: '1 hour ago',
-    preview: 'Latest language model achieves new benchmarks...',
+    group: 'finance',
+    label: 'FINANCIAL',
+    getItems: (feeds) => feeds.finance,
   },
   {
-    id: '4',
-    title: 'Quantum Computing Milestone',
-    category: 'Technology/AI',
-    timestamp: '6 hours ago',
-    preview: 'Researchers demonstrate stable quantum operations...',
-  },
-  {
-    id: '5',
-    title: 'Market Volatility Analysis',
-    category: 'Finance',
-    timestamp: '3 hours ago',
-    preview: 'Currency fluctuations impact global markets...',
-  },
-  {
-    id: '6',
-    title: 'Cryptocurrency Regulatory News',
-    category: 'Finance',
-    timestamp: '5 hours ago',
-    preview: 'New regulations proposed for digital assets...',
-  },
-  {
-    id: '7',
-    title: 'Critical System Alert',
-    category: 'Alerts',
-    timestamp: '30 minutes ago',
-    preview: 'High-priority monitoring event detected...',
-  },
-  {
-    id: '8',
-    title: 'Data Anomaly Detected',
-    category: 'Alerts',
-    timestamp: '1 hour ago',
-    preview: 'Unusual pattern identified in monitoring feed...',
+    group: 'alerts',
+    label: 'ALERTS',
+    getItems: (feeds, alerts) => alerts,
   },
 ];
 
-const categoryGroups = [
-  'World/Geopolitical',
-  'Technology/AI',
-  'Finance',
-  'Alerts',
-] as const;
-
 export const FeedsSection: React.FC = () => {
-  const feedsByCategory = categoryGroups.map((category) => ({
-    category,
-    feeds: placeholderFeeds.filter((feed) => feed.category === category),
-  }));
+  const { feeds, alerts, loading, fetchAllFeeds } = useFeedStore();
+
+  useEffect(() => {
+    // Cargar feeds al montar el componente
+    fetchAllFeeds();
+  }, [fetchAllFeeds]);
+
+  // Preparar grupos de feeds y ordenar por fecha (más recientes primero)
+  const feedGroupsData = feedGroups.map((config) => {
+    const items = config.getItems(feeds, alerts);
+    // Ordenar por fecha (más recientes primero)
+    const sortedItems = [...items].sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+    return {
+      ...config,
+      items: sortedItems,
+    };
+  });
 
   return (
     <section
@@ -86,35 +70,57 @@ export const FeedsSection: React.FC = () => {
       aria-label="Feeds Section"
     >
       <h2 className="text-xl font-semibold text-gray-100 mb-6">Feeds</h2>
-      
-      <div className="space-y-8">
-        {feedsByCategory.map(({ category, feeds }) => (
-          <div key={category} className="space-y-3">
-            <h3 className="text-lg font-medium text-gray-300 border-b border-gray-700 pb-2">
-              {category}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {feeds.map((feed) => (
-                <div
-                  key={feed.id}
-                  className="bg-gray-800 border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-100 line-clamp-2">
-                      {feed.title}
-                    </h4>
-                  </div>
-                  <p className="text-xs text-gray-400 mb-3 line-clamp-2">
-                    {feed.preview}
-                  </p>
-                  <div className="text-xs text-gray-500">{feed.timestamp}</div>
+
+      {loading ? (
+        <div className="text-center py-12">
+          <p className="text-gray-400">Loading feeds...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {feedGroupsData.map(({ group, label, items }) => (
+            <div
+              key={group}
+              className="flex flex-col border-r border-gray-700 last:border-r-0 pr-4 last:pr-0"
+            >
+              {/* Header con contador */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">
+                    {label}
+                  </h3>
+                  {items.length > 0 && (
+                    <span className="text-xs text-gray-500">{items.length}</span>
+                  )}
                 </div>
-              ))}
+                <div className="border-b border-gray-700"></div>
+              </div>
+
+              {/* Feed Cards */}
+              <div className="flex-1 overflow-y-auto max-h-[600px]">
+                {items.length === 0 ? (
+                  <div className="text-xs text-gray-500 py-4 text-center">
+                    No items available
+                  </div>
+                ) : (
+                  items.map((item, index) => (
+                    <FeedCard key={`${group}-${item.id}-${index}`} item={item} />
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {/* Estado de error global (si todos los feeds fallan) */}
+      {!loading && feedGroupsData.every((g) => g.items.length === 0) && (
+        <div className="text-center py-12">
+          <p className="text-gray-400 mb-2">Unable to load feeds</p>
+          <p className="text-xs text-gray-500">
+            This may be due to CORS restrictions or network issues.
+          </p>
+        </div>
+      )}
     </section>
   );
 };
-
