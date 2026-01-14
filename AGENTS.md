@@ -29,20 +29,27 @@
 La documentación está organizada en `docs/` con la siguiente estructura:
 
 - **Índice general**: `docs/index.md` - Tabla de contenidos global
-- **Setup y configuración**: `docs/setup/setup.md` - Configuración inicial e instalación
-- **Arquitectura**: `docs/architecture/architecture.md` - Estructura del proyecto, tech stack y patrones
+- **Setup y configuración**: `docs/setup/` - Configuración inicial e instalación (pendiente)
+- **Arquitectura**: `docs/architecture/` - Estructura del proyecto, tech stack y patrones
+  - `docs/architecture/Architecture.md` - Arquitectura general
+  - `docs/architecture/DataSources.md` - Fuentes de datos externas
 - **Features**: `docs/features/` - Documentación de funcionalidades implementadas
-  - `docs/features/generacion-emails.md` - Feature de generación de emails
+  - `docs/features/GlobalMap.md` - Sistema de mapas globales (implementado con D3.js y proyección geoEqualEarth())
+  - `docs/features/InterfaceDesign.md` - Diseño UI/UX
+  - `docs/features/NewsFeedIngestion.md` - Sistema de ingesta de feeds RSS
+  - `docs/features/NewsDrivenSectorHeatmap.md` - Heatmap de sectores basado en análisis narrativo de noticias
+  - `docs/features/Monitors.md` - Sistema de monitores personalizados
+  - `docs/features/FinanceApis.md` - APIs para datos financieros
 - **Referencias**: `docs/reference/` - Guías y referencias de herramientas
-  - `docs/reference/openspec-guide.md` - Guía de trabajo con OpenSpec
+  - `docs/reference/RssFeedsStrategy.md` - Estrategia de feeds RSS
 - **Otras secciones**: `docs/optimization/`, `docs/audit/`, `docs/troubleshooting/`, `docs/migrations/`, `docs/mcp/`
 
 
 ### Para documentar una nueva feature:
 1. Crear `docs/features/nombre-feature.md` con descripción, implementación, uso y diagramas
-2. Actualizar `docs/features/index.md` con el nuevo documento
+2. Actualizar `docs/index.md` con el nuevo documento en la sección Features
 3. Actualizar `CHANGELOG.md` en la sección correspondiente
-4. Actualizar `docs/index.md` si es necesario
+4. Actualizar `AGENTS.md` si es necesario
 
 ## Esctructura de changelog.md
 
