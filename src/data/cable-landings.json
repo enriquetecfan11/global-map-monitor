@@ -1,0 +1,13 @@
+[
+  { "name": "NYC", "lat": 40.7, "lon": -74.0, "desc": "New York — Transatlantic hub, 10+ cables" },
+  { "name": "Cornwall", "lat": 50.1, "lon": -5.5, "desc": "Cornwall UK — Europe-Americas gateway" },
+  { "name": "Marseille", "lat": 43.3, "lon": 5.4, "desc": "Marseille — Mediterranean hub, SEA-ME-WE" },
+  { "name": "Mumbai", "lat": 19.1, "lon": 72.9, "desc": "Mumbai — India gateway, 10+ cables" },
+  { "name": "Singapore", "lat": 1.3, "lon": 103.8, "desc": "Singapore — Asia-Pacific nexus" },
+  { "name": "Hong Kong", "lat": 22.3, "lon": 114.2, "desc": "Hong Kong — China connectivity hub" },
+  { "name": "Tokyo", "lat": 35.5, "lon": 139.8, "desc": "Tokyo — Trans-Pacific terminus" },
+  { "name": "Sydney", "lat": -33.9, "lon": 151.2, "desc": "Sydney — Australia/Pacific hub" },
+  { "name": "LA", "lat": 33.7, "lon": -118.2, "desc": "Los Angeles — Pacific gateway" },
+  { "name": "Miami", "lat": 25.8, "lon": -80.2, "desc": "Miami — Americas/Caribbean hub" }
+]
+

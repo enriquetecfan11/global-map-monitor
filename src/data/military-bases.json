@@ -1,0 +1,12 @@
+[
+  { "name": "Ramstein", "lat": 49.4, "lon": 7.6, "desc": "Ramstein — US Air Force, NATO hub Germany" },
+  { "name": "Diego Garcia", "lat": -7.3, "lon": 72.4, "desc": "Diego Garcia — US/UK Indian Ocean base" },
+  { "name": "Okinawa", "lat": 26.5, "lon": 127.9, "desc": "Okinawa — US Forces Japan, Pacific presence" },
+  { "name": "Guam", "lat": 13.5, "lon": 144.8, "desc": "Guam — US Pacific Command, bomber base" },
+  { "name": "Djibouti", "lat": 11.5, "lon": 43.1, "desc": "Djibouti — US/China/France bases, Horn of Africa" },
+  { "name": "Qatar", "lat": 25.1, "lon": 51.3, "desc": "Al Udeid — US CENTCOM forward HQ" },
+  { "name": "Kaliningrad", "lat": 54.7, "lon": 20.5, "desc": "Kaliningrad — Russian Baltic exclave, missiles" },
+  { "name": "Sevastopol", "lat": 44.6, "lon": 33.5, "desc": "Sevastopol — Russian Black Sea Fleet" },
+  { "name": "Hainan", "lat": 18.2, "lon": 109.5, "desc": "Hainan — Chinese submarine base, South China Sea" }
+]
+

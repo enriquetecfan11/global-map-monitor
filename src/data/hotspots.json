@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Strait of Hormuz",
+    "lat": 26.5,
+    "lon": 56.2,
+    "level": "high",
+    "desc": "Critical shipping chokepoint"
+  },
+  {
+    "name": "Suez Canal",
+    "lat": 30.6,
+    "lon": 32.3,
+    "level": "elevated",
+    "desc": "Major trade route"
+  },
+  {
+    "name": "Panama Canal",
+    "lat": 9.0,
+    "lon": -79.6,
+    "level": "elevated",
+    "desc": "Key maritime passage"
+  },
+  {
+    "name": "Taiwan Strait",
+    "lat": 24.5,
+    "lon": 119.5,
+    "level": "high",
+    "desc": "Geopolitical flashpoint"
+  },
+  {
+    "name": "South China Sea",
+    "lat": 12.0,
+    "lon": 113.0,
+    "level": "elevated",
+    "desc": "Disputed waters"
+  },
+  {
+    "name": "Bering Strait",
+    "lat": 65.8,
+    "lon": -168.9,
+    "level": "low",
+    "desc": "Arctic shipping route"
+  },
+  {
+    "name": "Strait of Malacca",
+    "lat": 1.4,
+    "lon": 103.5,
+    "level": "high",
+    "desc": "World's busiest shipping lane"
+  },
+  {
+    "name": "Bab el-Mandeb",
+    "lat": 12.6,
+    "lon": 43.3,
+    "level": "elevated",
+    "desc": "Red Sea gateway"
+  },
+  {
+    "name": "English Channel",
+    "lat": 50.2,
+    "lon": -0.5,
+    "level": "low",
+    "desc": "European shipping route"
+  },
+  {
+    "name": "Bosphorus Strait",
+    "lat": 41.0,
+    "lon": 29.0,
+    "level": "elevated",
+    "desc": "Black Sea access point"
+  }
+]
+

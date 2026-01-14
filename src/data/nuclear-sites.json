@@ -1,0 +1,10 @@
+[
+  { "name": "Natanz", "lat": 33.7, "lon": 51.7, "desc": "Natanz — Iran uranium enrichment" },
+  { "name": "Yongbyon", "lat": 39.8, "lon": 125.8, "desc": "Yongbyon — North Korea nuclear complex" },
+  { "name": "Dimona", "lat": 31.0, "lon": 35.1, "desc": "Dimona — Israel nuclear facility" },
+  { "name": "Bushehr", "lat": 28.8, "lon": 50.9, "desc": "Bushehr — Iran nuclear power plant" },
+  { "name": "Zaporizhzhia", "lat": 47.5, "lon": 34.6, "desc": "Zaporizhzhia — Europe largest NPP, conflict zone" },
+  { "name": "Chernobyl", "lat": 51.4, "lon": 30.1, "desc": "Chernobyl — Exclusion zone, occupied 2022" },
+  { "name": "Fukushima", "lat": 37.4, "lon": 141.0, "desc": "Fukushima — Decommissioning site" }
+]
+
