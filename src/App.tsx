@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+
 import { Header } from './components/Header';
 import { GlobalMapSection } from './components/GlobalMap';
 import { FeedsSection } from './components/Feeds';
-import { MarketsSection } from './components/Markets';
-import { AnalyticalModulesSection } from './components/AnalyticalModules';
+import { MarketsSection, SectorHeatmap } from './components/Markets';
 import { CustomMonitorsModal } from './components/CustomMonitors';
 
 const App: React.FC = () => {
@@ -16,18 +16,15 @@ const App: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col bg-gray-900">
-      {/* Header fijo en la parte superior */}
       <Header />
-      
-      {/* Contenedor scrollable con todas las secciones */}
+
       <main className="flex-1 overflow-y-auto">
         <GlobalMapSection />
         <FeedsSection />
+        <SectorHeatmap />
         <MarketsSection />
-        <AnalyticalModulesSection />
       </main>
 
-      {/* Modal de Custom Monitors (no visible por defecto) */}
       <CustomMonitorsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
