@@ -1,0 +1,85 @@
+---
+alwaysApply: true
+---
+
+Esta regla se aplica SIEMPRE, sin excepción, en cualquier acción que implique:
+- Cambios en documentación
+- Cambios en arquitectura
+- Nuevas features
+- Cambios de comportamiento del sistema
+- Correcciones o ajustes relevantes
+
+OBJETIVO
+Mantener CHANGELOG.md como un registro preciso, honesto y trazable del estado real del proyecto.
+
+PRINCIPIOS OBLIGATORIOS
+- El CHANGELOG refleja SOLO cambios reales.
+- Nunca se usa como roadmap.
+- Nunca se rellena con texto genérico.
+- Nunca se actualiza sin haber verificado el estado del repositorio.
+
+FLUJO OBLIGATORIO
+
+1. LECTURA PREVIA
+   Antes de modificar CHANGELOG.md, debes leer:
+   - CHANGELOG.md completo
+   - AGENTS.md
+   - docs/index.md
+   - Documentación afectada por el cambio (si existe)
+
+2. VALIDACIÓN DEL CAMBIO
+   Para cada posible entrada en el changelog:
+   - Verificar que el cambio existe realmente.
+   - Verificar que está documentado o implementado.
+   - Verificar que no es redundante con una entrada previa.
+
+   Si el cambio no es verificable → NO se añade.
+
+3. ESTRUCTURA ESTRICTA
+   Cada entrada debe cumplir exactamente esta estructura:
+
+   ## [Versión] - [Fecha]
+   ### Added
+   ### Changed
+   ### Fixed
+
+   Reglas:
+   - No inventar versiones.
+   - No mezclar tipos de cambios.
+   - No repetir información entre secciones.
+   - Frases cortas, técnicas y objetivas.
+
+4. CONTENIDO PERMITIDO
+   ✔ Cambios reales en features
+   ✔ Ajustes documentales relevantes
+   ✔ Correcciones de errores
+   ✔ Cambios en flujos core o arquitectura
+
+   ✘ No permitido:
+   - Intenciones futuras
+   - Refactors internos sin impacto
+   - Cambios cosméticos irrelevantes
+   - Texto narrativo o promocional
+
+5. SINCRONIZACIÓN
+   - Si se añade una entrada en CHANGELOG.md:
+     - Debe existir documentación asociada o referencia clara.
+     - Debe ser coherente con docs/ y AGENTS.md.
+   - Si no hay documentación → indicar inconsistencia y detenerse.
+
+6. SALIDA DE LA REGLA
+   Cuando se aplique esta regla, el resultado debe dejar claro:
+   - Qué entrada se ha añadido o modificado
+   - Qué archivos justifican el cambio
+   - Qué versión y fecha se han usado
+
+REGLAS DE ORO
+- CHANGELOG.md nunca lidera: refleja.
+- Si dudas → no escribas.
+- Un changelog incorrecto es peor que uno incompleto.
+
+TONO
+- Técnico
+- Preciso
+- Sin adjetivos
+- Sin explicaciones innecesarias
