@@ -7,6 +7,7 @@ import { create } from 'zustand';
 import type { FeedItem, FeedCategory, FeedStoreState } from '../types/feed.types';
 import { fetchAllRssFeeds } from '../utils/rssService';
 import { extractCountriesFromFeeds } from '../utils/countryExtractor';
+import { clearMentionsCache } from '../utils/mentionsService';
 
 interface FeedStore extends FeedStoreState {
   fetchAllFeeds: () => Promise<void>;
@@ -118,6 +119,9 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
         allFeedItems.push(...categoryItems);
       });
       const rssCountries = extractCountriesFromFeeds(allFeedItems);
+
+      // Limpiar cache de menciones cuando se actualizan los feeds
+      clearMentionsCache();
 
       set({
         feeds,

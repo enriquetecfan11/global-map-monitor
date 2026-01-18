@@ -17,6 +17,13 @@ export const useUIStore = create<UIStore>((set, get) => ({
   systemState: 'idle' as const,
   maxZIndex: 1000,
 
+  // Mentions panel state
+  mentionsPanel: {
+    isOpen: false,
+    countryName: null,
+    mentionCount: 0,
+  },
+
   // Actions
   togglePanel: () => set((state) => ({ collapsed: !state.collapsed })),
   
@@ -38,5 +45,23 @@ export const useUIStore = create<UIStore>((set, get) => ({
     set({ maxZIndex: newZIndex });
     return newZIndex;
   },
+
+  openMentionsPanel: (countryName: string, mentionCount: number) =>
+    set({
+      mentionsPanel: {
+        isOpen: true,
+        countryName,
+        mentionCount,
+      },
+    }),
+
+  closeMentionsPanel: () =>
+    set({
+      mentionsPanel: {
+        isOpen: false,
+        countryName: null,
+        mentionCount: 0,
+      },
+    }),
 }));
 

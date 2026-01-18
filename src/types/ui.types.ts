@@ -12,8 +12,15 @@ export interface PanelState {
   width: number;
 }
 
+export interface MentionsPanelState {
+  isOpen: boolean;
+  countryName: string | null;
+  mentionCount: number;
+}
+
 export interface UIStore extends UIState, PanelState {
   maxZIndex: number;
+  mentionsPanel: MentionsPanelState;
   togglePanel: () => void;
   setPanelWidth: (width: number) => void;
   setLoading: (loading: boolean) => void;
@@ -21,5 +28,7 @@ export interface UIStore extends UIState, PanelState {
   setEmpty: (empty: boolean) => void;
   setSystemState: (state: SystemState) => void;
   incrementZIndex: () => number;
+  openMentionsPanel: (countryName: string, mentionCount: number) => void;
+  closeMentionsPanel: () => void;
 }
 

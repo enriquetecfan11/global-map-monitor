@@ -4,6 +4,8 @@ import type { FeedItem } from '../../../types/feed.types';
 import type { Feature } from 'geojson';
 import { buildCountrySituation } from '../../../utils/countrySituationService';
 import { useFeedStore } from '../../../stores/feedStore';
+import { useUIStore } from '../../../stores/uiStore';
+import { getMentionCountForCountry } from '../../../utils/mentionsService';
 
 interface CountrySituationPopupProps {
   countryName: string;
@@ -25,6 +27,7 @@ export const CountrySituationPopup: React.FC<CountrySituationPopupProps> = ({
   
   // Obtener todos los feeds del store
   const feeds = useFeedStore((state) => state.feeds);
+  const { openMentionsPanel } = useUIStore();
   const allFeedItems: FeedItem[] = [];
   Object.values(feeds).forEach((categoryItems) => {
     allFeedItems.push(...categoryItems);
@@ -153,6 +156,17 @@ export const CountrySituationPopup: React.FC<CountrySituationPopupProps> = ({
                       )}
                     </div>
                   )}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const totalMentions = getMentionCountForCountry(allFeedItems, countryName);
+                      openMentionsPanel(countryName, totalMentions);
+                    }}
+                    className="w-full mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors"
+                  >
+                    Ver todas las menciones ({getMentionCountForCountry(allFeedItems, countryName)})
+                  </button>
                 </div>
               </div>
             )}

@@ -5,7 +5,7 @@ import type { RssCountryData } from '../../../types/feed.types';
 import { useFeedStore } from '../../../stores/feedStore';
 import { buildTooltipForRssCountry } from '../tooltips/tooltipBuilder';
 import { EnrichedTooltip } from '../tooltips/EnrichedTooltip';
-import { EnrichedPopup } from '../tooltips/EnrichedPopup';
+import { RssCountryPopup } from '../tooltips/RssCountryPopup';
 
 interface RssCountriesLayerProps {
   enabled: boolean;
@@ -89,8 +89,8 @@ export const RssCountriesLayer: React.FC<RssCountriesLayerProps> = React.memo(
               lat={country.lat}
               lon={country.lon}
             />
-            <EnrichedPopup
-              baseContent={tooltipPayload}
+            <RssCountryPopup
+              country={country}
               lat={country.lat}
               lon={country.lon}
             />

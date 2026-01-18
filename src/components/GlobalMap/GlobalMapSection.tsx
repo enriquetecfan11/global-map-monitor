@@ -1,9 +1,11 @@
 import React from 'react';
 import { useMapStore } from '../../stores/mapStore';
+import { useUIStore } from '../../stores/uiStore';
 import { LayerToggles } from './LayerToggles';
 import { MapLegend } from './MapLegend';
 import { LeafletMap } from './LeafletMap';
 import { LeafletMapControls } from './LeafletMapControls';
+import { MentionsPanel } from './MentionsPanel';
 import {
   CountriesLayer,
   HotspotsLayer,
@@ -16,6 +18,7 @@ import {
 
 export const GlobalMapSection: React.FC = () => {
   const { layers } = useMapStore();
+  const { mentionsPanel, closeMentionsPanel } = useUIStore();
   const fixedCenter: [number, number] = [20, 0];
   const initialZoom = 2;
   const minZoom = 1;
@@ -76,6 +79,13 @@ export const GlobalMapSection: React.FC = () => {
           <LayerToggles />
         </aside>
       </div>
+      
+      {/* Panel de menciones */}
+      <MentionsPanel
+        isOpen={mentionsPanel.isOpen}
+        countryName={mentionsPanel.countryName}
+        onClose={closeMentionsPanel}
+      />
     </section>
   );
 };
