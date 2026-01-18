@@ -270,12 +270,13 @@ El mapa funciona como un **panel de monitorización fijo**, conceptualmente equi
 
 ### Modelo de Interacción
 
-- **Pan (arrastre)**: **Deshabilitado** - El mapa permanece fijo en su posición inicial
-- **Zoom**: **Habilitado** - Permite zoom analítico desde el centro fijo para:
+- **Pan (arrastre)**: **Habilitado** - El mapa es completamente navegable, permitiendo explorar diferentes regiones
+- **Zoom**: **Habilitado** - Permite zoom interactivo para:
   - Analizar densidad de eventos
   - Acercarse a regiones concretas
   - Entender clusters
-- **Zoom máximo**: Limitado a nivel 4 para mantener la perspectiva global
+  - Navegar por el mapa globalmente
+- **Zoom**: Rango de zoom 1-10 (minZoom: 1, maxZoom: 10)
 - **Controles de zoom**: Panel de controles personalizado (esquina superior izquierda) con:
   - Botón "Zoom In" (+) - Acerca la vista
   - Botón "Zoom Out" (-) - Aleja la vista
@@ -284,14 +285,13 @@ El mapa funciona como un **panel de monitorización fijo**, conceptualmente equi
 
 ### Comportamiento Técnico
 
-El mapa se comporta como un monitor en tiempo real:
-- El centro del mapa (`[20, 0]`) se mantiene estable durante todas las operaciones de zoom
-- El usuario no puede desplazar el mapa libremente
-- El zoom es analítico, no exploratorio: siempre desde el mismo centro lógico
-- Zoom máximo limitado a nivel 4 para preservar la visión estratégica global
-- Los controles de zoom se deshabilitan automáticamente al alcanzar los límites (zoom 2 mínimo, zoom 4 máximo)
-- El reset de vista es instantáneo (sin animación) para mantener la sensación de "monitor fijo"
-- La sensación debe ser de "pantalla de control", no de "mapa navegable tipo Google Maps"
+El mapa es completamente interactivo:
+- El usuario puede desplazar el mapa libremente (pan)
+- El zoom es exploratorio: permite navegar por diferentes regiones del mundo
+- Zoom configurado con rango amplio (1-10) para permitir desde vista global hasta detalle local
+- Los controles de zoom se deshabilitan automáticamente al alcanzar los límites
+- El reset de vista restaura la vista inicial (zoom 2, centro [20, 0])
+- Implementado con Leaflet para máxima compatibilidad y rendimiento
 
 ### Integración con otras Features
 
@@ -383,23 +383,23 @@ La leyenda está **siempre visible** en la esquina inferior izquierda del mapa, 
 
 ## Consideraciones Técnicas
 
-### Implementación D3.js
+### Implementación Leaflet
 
-El mapa utiliza **D3.js** con la proyección **geoEqualEarth()** para renderizado estático:
+El mapa utiliza **Leaflet** con **react-leaflet** para renderizado interactivo:
 
-- **Componente base**: `D3Map.tsx` - SVG con proyección geoEqualEarth() configurada
-- **Renderizado**: Todas las capas se renderizan como elementos SVG usando `d3.select()` y `d3.geoPath()`
-- **Proyección**: geoEqualEarth() preserva áreas y es ideal para mapas mundiales estáticos
-- **Zoom**: Implementado con `d3-zoom` limitado a niveles 2-4, sin pan/arrastre
-- **Tooltips/Popups**: Sistema nativo con posicionamiento absoluto, sin dependencias de Leaflet
+- **Componente base**: `LeafletMap.tsx` - MapContainer de react-leaflet configurado
+- **Renderizado**: Todas las capas se renderizan como componentes de react-leaflet (GeoJSON, CircleMarker, Rectangle, Marker)
+- **Tile Layer**: Mapa base oscuro de CartoDB para mejor visualización
+- **Zoom**: Completamente interactivo con zoom y pan habilitados (minZoom: 1, maxZoom: 10)
+- **Tooltips/Popups**: Sistema nativo de Leaflet con tooltips y popups enriquecidos
 
 ### Arquitectura de Capas
 
-- Renderizado mediante capas superpuestas en SVG
+- Renderizado mediante componentes de react-leaflet
 - Separación clara entre:
   - Datos (JSON, GeoJSON)
-  - Lógica de transformación (proyección, escalas)
-  - Render visual (SVG elements)
+  - Lógica de transformación (Leaflet maneja proyecciones automáticamente)
+  - Render visual (Componentes Leaflet)
 - Preparado para:
   - Activación/desactivación de capas
   - Filtros dinámicos
@@ -465,7 +465,7 @@ El mapa utiliza **D3.js** con la proyección **geoEqualEarth()** para renderizad
 - Payload `CountrySituation` preparado para reutilización en Correlation Engine y Narrative Tracker
 - Click en país abre popup, hover mantiene tooltip básico
 
-### v2.0 - Migración a D3.js ✅
+### v2.0 - Migración a D3.js ✅ (Deprecado)
 
 - ✅ **Migración completa a D3.js**: Reemplazo de Leaflet por D3.js con proyección geoEqualEarth()
   - Componente base `D3Map.tsx` con SVG y proyección geoEqualEarth()
@@ -476,6 +476,19 @@ El mapa utiliza **D3.js** con la proyección **geoEqualEarth()** para renderizad
   - Utilidades de proyección y escalas en `d3MapUtils.ts`
   - Eliminación de dependencias de Leaflet (react-leaflet, leaflet, @types/leaflet)
   - Añadidas dependencias D3.js (d3, d3-geo, @types/d3)
+
+### v2.1 - Migración de vuelta a Leaflet ✅
+
+- ✅ **Migración completa a Leaflet**: Reemplazo de D3.js por Leaflet para resolver problemas de visualización
+  - Componente base `LeafletMap.tsx` con MapContainer de react-leaflet
+  - Todas las capas migradas a Leaflet (Countries, Hotspots, Conflicts, Cables, Nuclear, Military, RSS Countries)
+  - Sistema de tooltips y popups nativo de Leaflet
+  - Mapa completamente interactivo con zoom y pan habilitados (minZoom: 1, maxZoom: 10)
+  - Controles de zoom personalizados usando hook `useMap` de react-leaflet
+  - Tile layer oscuro de CartoDB para mejor visualización
+  - Reutilización de capas Leaflet existentes
+  - Eliminación de dependencias D3.js (d3, d3-geo, @types/d3)
+  - Añadidas dependencias Leaflet (react-leaflet, leaflet, @types/leaflet)
 
 ### Pendiente (Futuras Versiones)
 

@@ -1,45 +1,81 @@
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fix para iconos de Leaflet en React
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-
-const DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
+import React from 'react';
+import { useMapStore } from '../../stores/mapStore';
+import { LayerToggles } from './LayerToggles';
+import { MapLegend } from './MapLegend';
+import { LeafletMap } from './LeafletMap';
+import { LeafletMapControls } from './LeafletMapControls';
+import {
+  CountriesLayer,
+  HotspotsLayer,
+  ConflictZonesLayer,
+  CableLandingsLayer,
+  NuclearSitesLayer,
+  MilitaryBasesLayer,
+  RssCountriesLayer,
+} from './layers';
 
 export const GlobalMapSection: React.FC = () => {
-  useEffect(() => {
-    // Asegurar que los iconos se configuran correctamente
-    L.Marker.prototype.options.icon = DefaultIcon;
-  }, []);
+  const { layers } = useMapStore();
+  const fixedCenter: [number, number] = [20, 0];
+  const initialZoom = 2;
+  const minZoom = 1;
+  const maxZoom = 10;
 
   return (
     <section
       className="w-full h-[45vh] border-b border-gray-700 bg-gray-800"
       aria-label="Global Map"
     >
-      <MapContainer
-        center={[20, 0]}
-        zoom={2}
-        scrollWheelZoom={true}
-        className="h-full w-full"
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-      </MapContainer>
+      <div className="flex h-full">
+        <aside className="w-[240px] h-full flex-shrink-0">
+          <MapLegend />
+        </aside>
+        <main className="flex-1 h-full relative">
+          <LeafletMap
+            center={fixedCenter}
+            zoom={initialZoom}
+            minZoom={minZoom}
+            maxZoom={maxZoom}
+          >
+            <CountriesLayer
+              enabled={layers.countries.enabled}
+              zIndex={layers.countries.zIndex}
+            />
+            <ConflictZonesLayer
+              enabled={layers.conflicts.enabled}
+              zIndex={layers.conflicts.zIndex}
+            />
+            <HotspotsLayer
+              enabled={layers.hotspots.enabled}
+              zIndex={layers.hotspots.zIndex}
+            />
+            <CableLandingsLayer
+              enabled={layers.cables.enabled}
+              zIndex={layers.cables.zIndex}
+            />
+            <NuclearSitesLayer
+              enabled={layers.nuclear.enabled}
+              zIndex={layers.nuclear.zIndex}
+            />
+            <MilitaryBasesLayer
+              enabled={layers.military.enabled}
+              zIndex={layers.military.zIndex}
+            />
+            <RssCountriesLayer
+              enabled={layers.rssCountries.enabled}
+              zIndex={layers.rssCountries.zIndex}
+            />
+            <LeafletMapControls
+              initialZoom={initialZoom}
+              minZoom={minZoom}
+              maxZoom={maxZoom}
+            />
+          </LeafletMap>
+        </main>
+        <aside className="w-[200px] h-full flex-shrink-0">
+          <LayerToggles />
+        </aside>
+      </div>
     </section>
   );
 };
-
