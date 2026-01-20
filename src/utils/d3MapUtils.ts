@@ -22,7 +22,7 @@ export const createProjection = (
 
   // Ajustar escala para que el mundo quepa en el contenedor
   const path = d3.geoPath().projection(projection);
-  const bounds = path.bounds({ type: 'Sphere' } as GeoJSON);
+  const bounds = path.bounds({ type: 'Sphere' } as unknown as GeoJSON);
   const scale = 0.95 / Math.max(
     (bounds[1][0] - bounds[0][0]) / width,
     (bounds[1][1] - bounds[0][1]) / height
@@ -45,8 +45,8 @@ export const createProjection = (
  */
 export const updateProjectionScale = (
   projection: d3.GeoProjection,
-  width: number,
-  height: number,
+  _width: number,
+  _height: number,
   scale: number
 ): void => {
   const currentTranslate = projection.translate();

@@ -62,7 +62,7 @@ const initialState: SectorStoreState = {
  * Se suscribe automáticamente a cambios en feedStore.
  */
 export const useSectorStore = create<SectorStore>()(
-  subscribeWithSelector((set, get) => ({
+  subscribeWithSelector((set) => ({
     ...initialState,
 
     /**
@@ -118,15 +118,16 @@ export const useSectorStore = create<SectorStore>()(
  * Suscripción automática a cambios en feedStore.
  * Cuando feedStore se actualiza, recalcular scores de sectores.
  */
-useFeedStore.subscribe(
-  state => {
-    // Cuando feeds cambian o lastFetch se actualiza, recalcular scores
+let lastFetchValue: Date | null = null;
+useFeedStore.subscribe((state) => {
+  // Solo recalcular si lastFetch cambió
+  if (state.lastFetch !== lastFetchValue) {
+    lastFetchValue = state.lastFetch;
     if (state.lastFetch !== null) {
       useSectorStore.getState().updateScores();
     }
-  },
-  state => ({ feeds: state.feeds, lastFetch: state.lastFetch })
-);
+  }
+});
 
 /**
  * Inicializar scores al montar el store.

@@ -4,7 +4,7 @@
  */
 
 import { create } from 'zustand';
-import type { MarketItem, MarketStoreState } from '../types/market.types';
+import type { MarketStoreState } from '../types/market.types';
 import { fetchMarketData } from '../utils/marketService';
 
 interface MarketStore extends MarketStoreState {

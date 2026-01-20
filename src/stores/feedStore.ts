@@ -146,7 +146,7 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
     }
   },
 
-  refreshFeed: async (category: FeedCategory) => {
+  refreshFeed: async (_category: FeedCategory) => {
     // Para refresh individual, por ahora recargamos todos
     // En el futuro se podría optimizar para solo una categoría
     await get().fetchAllFeeds();
