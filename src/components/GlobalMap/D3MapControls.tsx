@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 interface D3MapControlsProps {
   initialZoom: number;
@@ -11,7 +11,6 @@ interface D3MapControlsProps {
 }
 
 export const D3MapControls: React.FC<D3MapControlsProps> = ({
-  initialZoom,
   minZoom,
   maxZoom,
   currentZoom,

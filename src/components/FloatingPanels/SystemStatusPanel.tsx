@@ -43,7 +43,9 @@ export const SystemStatusPanel: React.FC = () => {
           <span className="text-xs font-medium text-gray-300">{status.label}</span>
         </div>
       }
-    />
+    >
+      {null}
+    </FloatingPanel>
   );
 };
 

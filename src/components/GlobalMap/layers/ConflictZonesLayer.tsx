@@ -34,7 +34,6 @@ export const ConflictZonesLayer: React.FC<ConflictZonesLayerProps> = React.memo(
                 weight: 1.5,
                 opacity: 0.8,
               }}
-              zIndexOffset={zIndex}
             >
               <Tooltip permanent={false} direction="top" className="custom-tooltip">
                 <div dangerouslySetInnerHTML={{ __html: tooltipContent }} />

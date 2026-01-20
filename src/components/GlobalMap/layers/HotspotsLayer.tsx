@@ -62,7 +62,6 @@ export const HotspotsLayer: React.FC<HotspotsLayerProps> = React.memo(
                 weight: 2,
                 opacity: 1,
               }}
-              zIndexOffset={zIndex}
             >
               <EnrichedTooltip
                 baseContent={tooltipPayload}

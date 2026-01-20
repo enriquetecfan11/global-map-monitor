@@ -82,7 +82,6 @@ export const RssCountriesLayer: React.FC<RssCountriesLayerProps> = React.memo(
             key={`rss-country-${index}-${country.name}`}
             position={[country.lat, country.lon]}
             icon={icon}
-            zIndexOffset={zIndex}
           >
             <EnrichedTooltip
               baseContent={tooltipPayload}

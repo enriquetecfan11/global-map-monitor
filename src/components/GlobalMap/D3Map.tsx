@@ -66,7 +66,7 @@ export const D3Map: React.FC<D3MapProps> = ({
     const zoom = d3
       .zoom<SVGSVGElement, unknown>()
       .scaleExtent([minScale / baseScaleRef.current, maxScale / baseScaleRef.current])
-      .on('zoom', (event) => {
+      .on('zoom', (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
         const { transform } = event;
         const newScale = baseScaleRef.current * transform.k;
         

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import type { FeedItem, FeedCategory } from '../../types/feed.types';
 import { useFeedStore } from '../../stores/feedStore';
-import { useUIStore } from '../../stores/uiStore';
 import { getMentionsForCountry, type TimeRange, type MentionsFilters } from '../../utils/mentionsService';
 
 interface MentionsPanelProps {

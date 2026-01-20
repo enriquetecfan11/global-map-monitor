@@ -1,1 +1,1 @@
-export { MentionsPanel } from './MentionsPanel';
+export { MentionsPanel } from '../MentionsPanel';

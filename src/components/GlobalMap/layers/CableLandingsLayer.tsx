@@ -12,7 +12,7 @@ interface CableLandingsLayerProps {
 }
 
 export const CableLandingsLayer: React.FC<CableLandingsLayerProps> = React.memo(
-  ({ enabled, zIndex }) => {
+  ({ enabled, zIndex: _zIndex }) => {
     const cableLandings = useMemo(() => cableLandingsData as StrategicInfrastructureData[], []);
 
     if (!enabled) {
@@ -24,7 +24,7 @@ export const CableLandingsLayer: React.FC<CableLandingsLayerProps> = React.memo(
         {cableLandings.map((cable, index) => {
           const tooltipPayload = buildTooltipForStrategicInfra(cable, 'Cable Landing');
 
-          return (
+          const marker = (
             <CircleMarker
               key={`cable-${index}-${cable.name}`}
               center={[cable.lat, cable.lon]}
@@ -36,7 +36,6 @@ export const CableLandingsLayer: React.FC<CableLandingsLayerProps> = React.memo(
                 weight: 2,
                 opacity: 1,
               }}
-              zIndexOffset={zIndex}
             >
               <EnrichedTooltip
                 baseContent={tooltipPayload}
@@ -50,6 +49,7 @@ export const CableLandingsLayer: React.FC<CableLandingsLayerProps> = React.memo(
               />
             </CircleMarker>
           );
+          return marker;
         })}
       </>
     );

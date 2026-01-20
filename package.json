@@ -9,6 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "d3": "^7.8.5",
+    "d3-geo": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
@@ -17,6 +19,8 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/d3-geo": "^3.0.9",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@types/leaflet": "^1.9.8",

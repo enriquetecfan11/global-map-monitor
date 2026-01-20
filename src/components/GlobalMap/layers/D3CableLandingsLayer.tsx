@@ -35,7 +35,7 @@ export const D3CableLandingsLayer: React.FC<D3CableLandingsLayerProps> = React.m
       cables.forEach((cable, index) => {
         const [x, y] = latLonToXY(projection, cable.lat, cable.lon);
 
-        const circle = group
+        group
           .append('circle')
           .attr('class', `cable-${index}`)
           .attr('cx', x)
@@ -46,7 +46,7 @@ export const D3CableLandingsLayer: React.FC<D3CableLandingsLayerProps> = React.m
           .attr('stroke', '#FFFFFF')
           .attr('stroke-width', 2)
           .style('cursor', 'pointer')
-          .on('mouseover', function (event) {
+          .on('mouseover', function (event: MouseEvent) {
             setHoveredCable(cable);
             const [tx, ty] = d3.pointer(event);
             setTooltipPosition([tx, ty]);
@@ -54,7 +54,7 @@ export const D3CableLandingsLayer: React.FC<D3CableLandingsLayerProps> = React.m
           .on('mouseout', function () {
             setHoveredCable(null);
           })
-          .on('click', function (event) {
+          .on('click', function (event: MouseEvent) {
             setClickedCable(cable);
             const [tx, ty] = d3.pointer(event);
             setTooltipPosition([tx, ty]);

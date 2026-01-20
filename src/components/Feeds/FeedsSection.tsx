@@ -14,12 +14,12 @@
 import React, { useEffect } from 'react';
 import { useFeedStore } from '../../stores/feedStore';
 import { FeedCard } from './FeedCard';
-import type { FeedGroup, FeedItem } from '../../types/feed.types';
+import type { FeedGroup, FeedItem, FeedCategory } from '../../types/feed.types';
 
 interface FeedGroupConfig {
   group: FeedGroup;
   label: string;
-  getItems: (feeds: ReturnType<typeof useFeedStore>['feeds'], alerts: FeedItem[]) => FeedItem[];
+  getItems: (feeds: Record<FeedCategory, FeedItem[]>, alerts: FeedItem[]) => FeedItem[];
 }
 
 const feedGroups: FeedGroupConfig[] = [
@@ -41,7 +41,7 @@ const feedGroups: FeedGroupConfig[] = [
   {
     group: 'alerts',
     label: 'ALERTS',
-    getItems: (feeds, alerts) => alerts,
+    getItems: (_feeds, alerts) => alerts,
   },
 ];
 

@@ -14,7 +14,7 @@ const LayerToggle: React.FC<LayerToggleProps> = ({ layerId, label, enabled, onTo
     <button
       onClick={onToggle}
       className="flex items-center gap-2 px-3 py-2 min-h-[44px] min-w-[120px] bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-md transition-colors text-left"
-      aria-label={`Toggle ${label} layer`}
+      aria-label={`Toggle ${label} layer (${layerId})`}
       aria-pressed={enabled}
     >
       <div
