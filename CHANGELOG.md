@@ -7,58 +7,113 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+### Added
+- **MentionsPanel**: Panel lateral desplegable para visualizar menciones de países específicos desde feeds RSS
+  - Componente drawer lateral (300px ancho) que muestra todas las noticias donde se menciona un país seleccionado
+  - Filtros avanzados por rango temporal (24h, 7d, 30d, all), categoría (world, geopolitical, technology, ai, finance) y búsqueda de texto
+  - Contador total de menciones en el header del panel
+  - Cards de noticias con badges de categoría y timestamp relativo
+  - Integración con popups de países: botón "View All Mentions" abre el panel
+  - Cache en memoria por país y filtros para rendimiento
+  - Estado gestionado en `uiStore.ts` (mentionsPanel state)
+  - Servicio `mentionsService.ts` con funciones para obtener y filtrar menciones
+- **Market Data Management**: Sistema completo de gestión de datos financieros en tiempo real
+  - Servicio `marketService.ts` implementando integración con múltiples APIs financieras
+  - CoinGecko API para criptomonedas (BTC, ETH) - funciona sin proxy, sin API key
+  - Alpha Vantage API para acciones e índices (SPX, DJI, IXIC, AAPL, MSFT, GOOGL, NVDA, ASML, MU, AVGO, AMZN, SNPS, SNOW, ALAB, IBM, PLTR, CRM)
+  - Cache en memoria por sesión para evitar requests repetidos
+  - Timeout de 10 segundos para prevenir bloqueos
+  - Manejo de errores silencioso con fallback
+  - Store `marketStore.ts` para gestión de estado con persistencia en localStorage
+  - Actualización periódica automática (cada 5 minutos)
+  - UI de loading y error states en MarketsSection
+- **D3.js Support**: Re-integración de D3.js y d3-geo para visualizaciones avanzadas
+  - Añadidas dependencias d3 (^7.8.5) y d3-geo (^3.1.0)
+  - Tipos TypeScript @types/d3 y @types/d3-geo para type safety
+  - Capas D3 disponibles para casos de uso específicos: D3CountriesLayer, D3HotspotsLayer, D3ConflictZonesLayer, D3CableLandingsLayer, D3NuclearSitesLayer, D3MilitaryBasesLayer, D3RssCountriesLayer
+  - D3Map component con proyección geoEqualEarth() para visualización global
+  - D3MapControls para zoom y pan en visualizaciones D3
+  - D3Tooltip y D3Popup para tooltips y popups específicos de D3
+- **Type Definitions Mejoradas**: Archivo `vite-env.d.ts` para definiciones de entorno Vite
+  - Interfaces ImportMetaEnv con DEV, PROD, MODE
+  - Interface ImportMeta extendida con env
+  - Preparado para variables de entorno adicionales
+- **Vercel Deployment Config**: Configuración para despliegue automático en Vercel
+  - Archivo `vercel.json` con configuración completa de build y deployment
+  - Framework detectado: Vite
+  - Comandos: buildCommand `npm run build`, devCommand `npm run dev`, installCommand `npm install`
+   - Rewrites para SPA routing: todas las rutas redirigen a `/index.html`
+- **News-Driven Sector Heatmap**: Sistema de heatmap de sectores basado en análisis narrativo de noticias
+   - Transformación del Sector Heatmap de datos hardcodeados a sistema dinámico basado en noticias
+   - Clasificación automática de noticias por sector (Technology, Finance, Healthcare, Energy, Consumer, Industrial, Materials, Utilities), sentimiento (positive/negative/neutral) e impacto (low/medium/high) usando keyword matching
+   - Cálculo de scores narrativos normalizados (-100 a +100) por sector basado en agregación de noticias de las últimas 12 horas
+   - Fórmula de scoring con impacto ponderado, decay de recencia y dirección de sentimiento
+   - Store de Zustand (`sectorStore.ts`) que se actualiza automáticamente cuando `feedStore` cambia
+   - Componente `SectorHeatmap` actualizado para mostrar scores reales con colores que reflejan narrativa (rojo=negativa, verde=positiva, amarillo=neutra)
+   - Umbrales de colores ajustados: bajo (hasta ±1), medio (±2 a ±4), alto (±5 o más, +6 es más alto)
+   - Modal de detalles (`SectorDetailsModal`) que muestra explicación narrativa generada desde templates y lista de top noticias con badges de sentimiento e impacto
+   - Click en sector abre modal con análisis narrativo, estadísticas y noticias relevantes
+   - Soporte multi-sector: una noticia puede afectar múltiples sectores simultáneamente
+   - Integración completa con sistema de feeds RSS existente
+   - Documentación completa en `docs/features/NewsDrivenSectorHeatmap.md`
+- **Country Situation Popup**: Vista estratégica completa de situación de país al hacer click
+   - Popup estructurado con secciones modulares: encabezado, actividad reciente, eventos relevantes, señales geográficas
+   - Encabezado con nombre del país, hora local calculada e indicador de actividad (low/medium/high)
+   - Actividad reciente agregada: total de eventos detectados (últimas 24h) con distribución por tipo (noticias, conflicto, infraestructura)
+   - Eventos relevantes: lista curada de 3-5 eventos recientes con iconos, títulos, timestamps relativos y fuentes
+   - Señales geográficas: hotspots, zonas de conflicto e infraestructura crítica dentro del país
+   - Servicio centralizado `countrySituationService.ts` con función `buildCountrySituation()` reutilizable
+   - Matching aproximado por nombre para relacionar hotspots/infraestructura con países
+   - Integración con feeds RSS para eventos en tiempo real
+   - Renderizado progresivo con skeleton loading
+   - Componente `CountrySituationPopup` con diseño limpio y escaneable
+   - Click en país abre popup, hover mantiene tooltip básico
+   - Documentación completa en `docs/features/GlobalMap.md` con sección "Country Situation Popup"
+- **Leyenda Visual Profesional para GlobalMap**: Leyenda persistente e integrada que explica todos los tipos de marcadores del mapa
+   - Componente `MapLegend` siempre visible en esquina inferior izquierda del mapa
+   - Estructura jerárquica y compacta (máximo 240px de ancho) con agrupación lógica por categorías
+   - Explicación explícita de todos los tipos de marcadores:
+     - Hotspots con 3 niveles (High Threat, Elevated, Low Threat) mostrando colores y tamaños exactos
+     - Conflict Zones (Active Conflict) con representación de rectángulo semitransparente
+     - Infraestructura Estratégica (Cable Landings, Nuclear Sites, Military Bases) con colores únicos
+     - RSS / Countries (News Activity) con gradiente de color según menciones
+   - Cada elemento muestra símbolo visual exacto, nombre y descripción semántica breve
+   - Estilos coherentes con dark theme (bg-gray-800/95, border-gray-700, backdrop-blur)
+   - z-index 1000 para permanecer visible sobre el mapa
+   - Documentación completa en `docs/features/GlobalMap.md` con sección "Visual Legend & Semantic Encoding"
+   - Sistema de codificación visual documentado: colores, formas, tamaños e interpretación del mapa
+
 ### Changed
 - **Migración de D3.js a Leaflet**: Reemplazo completo del sistema de mapas de D3.js por Leaflet para resolver problemas de visualización
-  - Componente base `LeafletMap.tsx` con MapContainer de react-leaflet
-  - Migración de todas las capas a Leaflet: CountriesLayer, HotspotsLayer, ConflictZonesLayer, CableLandingsLayer, NuclearSitesLayer, MilitaryBasesLayer, RssCountriesLayer
-  - Sistema de tooltips y popups nativo de Leaflet
-  - Mapa completamente interactivo con zoom y pan habilitados (minZoom: 1, maxZoom: 10)
-  - Controles de zoom personalizados (LeafletMapControls.tsx) usando hook `useMap` de react-leaflet
-  - Tile layer oscuro de CartoDB para mejor visualización
-  - Reutilización de capas Leaflet existentes
-  - Eliminación de dependencias: d3, d3-geo, @types/d3
-  - Añadidas dependencias: react-leaflet, leaflet, @types/leaflet
-
-### Added
-- **News-Driven Sector Heatmap**: Sistema de heatmap de sectores basado en análisis narrativo de noticias
-  - Transformación del Sector Heatmap de datos hardcodeados a sistema dinámico basado en noticias
-  - Clasificación automática de noticias por sector (Technology, Finance, Healthcare, Energy, Consumer, Industrial, Materials, Utilities), sentimiento (positive/negative/neutral) e impacto (low/medium/high) usando keyword matching
-  - Cálculo de scores narrativos normalizados (-100 a +100) por sector basado en agregación de noticias de las últimas 12 horas
-  - Fórmula de scoring con impacto ponderado, decay de recencia y dirección de sentimiento
-  - Store de Zustand (`sectorStore.ts`) que se actualiza automáticamente cuando `feedStore` cambia
-  - Componente `SectorHeatmap` actualizado para mostrar scores reales con colores que reflejan narrativa (rojo=negativa, verde=positiva, amarillo=neutra)
-  - Umbrales de colores ajustados: bajo (hasta ±1), medio (±2 a ±4), alto (±5 o más, +6 es más alto)
-  - Modal de detalles (`SectorDetailsModal`) que muestra explicación narrativa generada desde templates y lista de top noticias con badges de sentimiento e impacto
-  - Click en sector abre modal con análisis narrativo, estadísticas y noticias relevantes
-  - Soporte multi-sector: una noticia puede afectar múltiples sectores simultáneamente
-  - Integración completa con sistema de feeds RSS existente
-  - Documentación completa en `docs/features/NewsDrivenSectorHeatmap.md`
-- **Country Situation Popup**: Vista estratégica completa de situación de país al hacer click
-  - Popup estructurado con secciones modulares: encabezado, actividad reciente, eventos relevantes, señales geográficas
-  - Encabezado con nombre del país, hora local calculada e indicador de actividad (low/medium/high)
-  - Actividad reciente agregada: total de eventos detectados (últimas 24h) con distribución por tipo (noticias, conflicto, infraestructura)
-  - Eventos relevantes: lista curada de 3-5 eventos recientes con iconos, títulos, timestamps relativos y fuentes
-  - Señales geográficas: hotspots, zonas de conflicto e infraestructura crítica dentro del país
-  - Servicio centralizado `countrySituationService.ts` con función `buildCountrySituation()` reutilizable
-  - Matching aproximado por nombre para relacionar hotspots/infraestructura con países
-  - Integración con feeds RSS para eventos en tiempo real
-  - Renderizado progresivo con skeleton loading
-  - Componente `CountrySituationPopup` con diseño limpio y escaneable
-  - Click en país abre popup, hover mantiene tooltip básico
-  - Documentación completa en `docs/features/GlobalMap.md` con sección "Country Situation Popup"
-- **Leyenda Visual Profesional para GlobalMap**: Leyenda persistente e integrada que explica todos los tipos de marcadores del mapa
-  - Componente `MapLegend` siempre visible en esquina inferior izquierda del mapa
-  - Estructura jerárquica y compacta (máximo 240px de ancho) con agrupación lógica por categorías
-  - Explicación explícita de todos los tipos de marcadores:
-    - Hotspots con 3 niveles (High Threat, Elevated, Low Threat) mostrando colores y tamaños exactos
-    - Conflict Zones (Active Conflict) con representación de rectángulo semitransparente
-    - Infraestructura Estratégica (Cable Landings, Nuclear Sites, Military Bases) con colores únicos
-    - RSS / Countries (News Activity) con gradiente de color según menciones
-  - Cada elemento muestra símbolo visual exacto, nombre y descripción semántica breve
-  - Estilos coherentes con dark theme (bg-gray-800/95, border-gray-700, backdrop-blur)
-  - z-index 1000 para permanecer visible sobre el mapa
-  - Documentación completa en `docs/features/GlobalMap.md` con sección "Visual Legend & Semantic Encoding"
-  - Sistema de codificación visual documentado: colores, formas, tamaños e interpretación del mapa
+   - Componente base `LeafletMap.tsx` con MapContainer de react-leaflet
+   - Migración de todas las capas a Leaflet: CountriesLayer, HotspotsLayer, ConflictZonesLayer, CableLandingsLayer, NuclearSitesLayer, MilitaryBasesLayer, RssCountriesLayer
+   - Sistema de tooltips y popups nativo de Leaflet
+   - Mapa completamente interactivo con zoom y pan habilitados (minZoom: 1, maxZoom: 10)
+   - Controles de zoom personalizados (LeafletMapControls.tsx) usando hook `useMap` de react-leaflet
+   - Tile layer oscuro de CartoDB para mejor visualización
+   - Reutilización de capas Leaflet existentes
+   - Eliminación de dependencias: d3, d3-geo, @types/d3
+   - Añadidas dependencias: react-leaflet, leaflet, @types/leaflet
+- **Dependencias Actualizadas**:
+   - Vite actualizado a versión 7.3.1 (desde 5.x) para mejor rendimiento y compatibilidad
+   - esbuild actualizado a 0.27.2
+   - Package.lock.json regenerado con nuevas versiones de dependencias
+- **TypeScript Configuration Refactorizado**:
+   - Deshabilitada opción `noUnusedLocals` para mayor flexibilidad durante desarrollo
+   - Deshabilitada opción `noUnusedParameters` para evitar errores durante desarrollo
+   - Mejor balance entre type safety y productividad
+- **Refactorización de Stores**:
+   - `feedStore.ts`: refactorizado método `refreshFeed` para mayor claridad
+   - `marketStore.ts`: limpiado imports y ajustadas definiciones de tipos
+   - `sectorStore.ts`: limpiado imports para consistencia
+- **Mejoras en Componentes GlobalMap**:
+   - `FeedsSection`: mejorado type safety con `FeedCategory`
+   - `SystemStatusPanel`: mejorado renderizado para asegurar visualización correcta
+   - `D3Map`: mejoradas anotaciones de tipo para mejor manejo de eventos
+   - `D3MapControls`: simplificado eliminando props no utilizados
+   - `LayerToggles`: actualizados labels de accesibilidad para incluir IDs de capas
+   - `MentionsPanel`: limpiados imports y ajustada estructura del componente
+   - Capas de mapa refinadas eliminando props innecesarias y mejorando claridad del código
 
 ## [0.5.1] - 2026-01-09
 
